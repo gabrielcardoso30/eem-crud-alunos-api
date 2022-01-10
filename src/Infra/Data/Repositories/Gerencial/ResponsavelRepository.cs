@@ -41,7 +41,7 @@ namespace Infra.Data.Repositories.Gerencial
 
         }
 
-        public async Task<IList<Responsavel>> GetByAlunosId(IEnumerable<Guid?> ids)
+        public async Task<IList<Responsavel>> GetByAlunosId(IEnumerable<Guid> ids)
         {
 
             var query = _dbContext.Responsavel.AsQueryable().Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada && ids.Contains(gc.AlunoId));
