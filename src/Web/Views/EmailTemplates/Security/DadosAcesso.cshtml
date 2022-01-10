@@ -1,0 +1,129 @@
+@model Core.Models.Responses.Security.UsuarioResponse
+
+<html>
+
+<head>
+  <style>
+    body {
+      margin: 0cm;
+    }
+
+    .container {
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      width: 400px;
+      max-width: 400px;
+      padding-bottom: 30px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 25px;
+    }
+
+    .header-title {
+      text-align: center;
+    }
+
+    .header-numerordo {
+      text-align: center;
+      padding-right: 50px;
+    }
+
+    .header-logo {
+      text-align: center;
+      padding-left: 50px;
+    }
+
+    .session-title {
+      background-color: #eee;
+      line-height: 40px;
+      text-align: center;
+    }
+
+    .session-container {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .table-header {
+      width: 100%;
+    }
+
+    .table-header th,
+    .table-header td {
+      text-align: center;
+    }
+
+    .table {
+      width: 100%;
+    }
+
+    .table th {
+      font-weight: bolder;
+      background-color: #eee;
+    }
+
+    .table th,
+    .table td {
+      text-align: left;
+      border: 1px solid #eee;
+      font-size: 12px !important;
+    }
+
+    .caixa-vazia {
+      width: 100%;
+      min-height: 100px;
+    }
+
+    th,
+    td,
+    p,
+    strong,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    span {
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='container'>
+    <div class='session-title'>
+      <h4 style="margin: 0px">DADOS DE ACESSO PARA @Model.Login</h4>
+    </div>
+    <table class='table'>
+      <thead>
+        <th width="50%">LOGIN</th>
+        <th width="50%">MATRÍCULA</th>
+      </thead>
+      <tbody>
+        <td width="50%">@Model.Login</td>
+        <td width="50%">@Model.Matricula</td>
+      </tbody>
+    </table>
+    <table class='table'>
+      <thead>
+        <th width="50%">CHAVE</th>
+        <th width="50%">SENHA</th>
+      </thead>
+      <tbody>
+        <td width="50%">@Model.Chave</td>
+        <td width="50%">@Model.Senha</td>
+      </tbody>
+    </table>
+    <div class='session-title'>
+      <h4>ACESSAR SISTEMA</h4>
+    </div>
+    <p style="text-align: center;"><a href="https://rdo.vixmob.app.br/">Clique aqui para acessar</a></p>
+  </div>
+</body>
+
+</html>
