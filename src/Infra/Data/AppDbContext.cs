@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Infra.Data.ModelConfiguration.Security;
+using Infra.Data.ModelConfiguration.Gerencial;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Core.Helpers;
 using Core.Interfaces.Security;
@@ -20,6 +21,7 @@ using ParametroSistema = Core.Entities.Security.ParametroSistema;
 using Permissao = Core.Entities.Security.Permissao;
 using PermissaoGrupo = Core.Entities.Security.PermissaoGrupo;
 using PermissaoUsuario = Core.Entities.Security.PermissaoUsuario;
+using Core.Entities.Gerencial;
 
 namespace Infra.Data
 {
@@ -38,6 +40,7 @@ namespace Infra.Data
             _authenticatedUser = authenticatedUser;
         }
         
+        //SECURITY
         public virtual DbSet<AspNetUsersRefreshToken> AspNetUsersRefreshToken { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Auditoria> Auditoria { get; set; }
@@ -51,6 +54,10 @@ namespace Infra.Data
         public virtual DbSet<UnidadeAcessoModulo> UnidadeAcessoModulo { get; set; }
         public virtual DbSet<GrupoModulo> GrupoModulo { get; set; }
         public virtual DbSet<GrupoUnidadeAcesso> GrupoUnidadeAcesso { get; set; }
+
+        //GERENCIAL
+        public virtual DbSet<Aluno> Aluno { get; set; }
+        public virtual DbSet<Responsavel> Responsavel { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -79,6 +86,10 @@ namespace Infra.Data
             modelBuilder.ApplyConfiguration(new GrupoModuloModelConfiguration());
             modelBuilder.ApplyConfiguration(new GrupoUnidadeAcessoModelConfiguration());
 
+            /******************************* Pasta Gerencial ****************************************/
+            modelBuilder.ApplyConfiguration(new AlunoModelConfiguration());
+            modelBuilder.ApplyConfiguration(new ResponsavelModelConfiguration());
+
 
             PutDeletedFilter(modelBuilder);
 
@@ -91,6 +102,10 @@ namespace Infra.Data
             modelBuilder.Entity<ApplicationUser>().HasQueryFilter(gc => !gc.Deletado);
             modelBuilder.Entity<Grupo>().HasQueryFilter(gc => !gc.Deletado);
             modelBuilder.Entity<UnidadeAcesso>().HasQueryFilter(gc => !gc.Deletado);
+
+            /******************************* Pasta Gerencial ****************************************/
+            modelBuilder.Entity<Aluno>().HasQueryFilter(gc => !gc.Deletado);
+            modelBuilder.Entity<Responsavel>().HasQueryFilter(gc => !gc.Deletado);
 
         }
 
