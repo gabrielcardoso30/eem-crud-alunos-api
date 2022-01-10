@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Core.Interfaces.Helpers;
 using System.IO;
+using Core.Enums.Gerencial;
 
 namespace Core.Commands.Gerencial.Handler
 {
@@ -38,6 +39,7 @@ namespace Core.Commands.Gerencial.Handler
         {
 
             var result = new Result<AlunoResponse>();
+            IDictionary<string, string> dic = Enum.GetValues(typeof(EnumSegmento)).Cast<object>().ToDictionary(v => ((Enum)v).ObterDescricaoEnum(), k => ((Enum)k).Valor());
             var oldRegister = await _repository.GetById(request.Id);
 
             if (oldRegister == null)
@@ -52,6 +54,18 @@ namespace Core.Commands.Gerencial.Handler
             )
             {
                 result.WithError("Nome, segmento ou a data de nascimento estão inválidos!");
+                return result;
+            }
+
+            if (String.IsNullOrEmpty(dic.Where(gc => gc.Value == request.Request.Segmento).FirstOrDefault().Value))
+            {
+                result.WithError("Segmento não encontrado. Informe um que seja válido!");
+                return result;
+            }
+
+            if (request.Request.Segmento.ToUpper() is "FUNDAMENTAL" && String.IsNullOrEmpty(request.Request.Email))
+            {
+                result.WithError("Para alunos do ensino fundamental, o e-mail é obrigatório!");
                 return result;
             }
 

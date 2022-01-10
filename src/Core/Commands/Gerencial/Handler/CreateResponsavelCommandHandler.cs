@@ -41,6 +41,12 @@ namespace Core.Commands.Gerencial.Handler
                 return result;
             }
 
+            if (String.IsNullOrEmpty(request.Request.Email))
+            {
+                result.WithError("O e-mail é obrigatório!");
+                return result;
+            }
+
             var registro = _mapper.Map<Responsavel>(request.Request);
             registro.UnidadeAcessoId = await _repository.GetSelectedAccessUnitIdAsync();
             var grupo = await _repository.AddAsync(registro);

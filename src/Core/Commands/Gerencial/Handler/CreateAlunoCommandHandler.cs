@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Core.Interfaces.Helpers;
 using System.IO;
+using Core.Enums.Gerencial;
 
 namespace Core.Commands.Gerencial.Handler
 {
@@ -39,6 +40,8 @@ namespace Core.Commands.Gerencial.Handler
 
             var result = new Result<AlunoResponse>();
 
+            IDictionary<string, string> dic = Enum.GetValues(typeof(EnumSegmento)).Cast<object>().ToDictionary(v => ((Enum)v).ObterDescricaoEnum(), k => ((Enum)k).Valor());
+
             if (String.IsNullOrEmpty(request.Request.Nome)
                 || String.IsNullOrEmpty(request.Request.Segmento)
                 || request.Request.DataNascimento < DateTime.Parse("1900-01-01")
@@ -48,9 +51,22 @@ namespace Core.Commands.Gerencial.Handler
                 return result;
             }
 
+            if (String.IsNullOrEmpty(dic.Where(gc => gc.Value == request.Request.Segmento).FirstOrDefault().Value))
+            {
+                result.WithError("Segmento não encontrado. Informe um que seja válido!");
+                return result;
+            }
+
+            if (request.Request.Segmento.ToUpper() is "FUNDAMENTAL" && String.IsNullOrEmpty(request.Request.Email))
+            {
+                result.WithError("Para alunos do ensino fundamental, o e-mail é obrigatório!");
+                return result;
+            }
+
             var registro = _mapper.Map<Aluno>(request.Request);
             registro.UnidadeAcessoId = await _repository.GetSelectedAccessUnitIdAsync();
             var response = await _repository.AddAsync(registro);
+            result.Value = _mapper.Map<AlunoResponse>(response);
 
             if (!String.IsNullOrEmpty(request.Request.FotoBase64) && !String.IsNullOrEmpty(request.Request.FotoTipo))
             {
@@ -69,12 +85,12 @@ namespace Core.Commands.Gerencial.Handler
                 if (!String.IsNullOrEmpty(arquivoUrl))
                 {
                     registro.FotoUrl = arquivoUrl;
-                    response = await _repository.AddAsync(registro);
+                    await _repository.UpdateAsync(registro);
+                    result.Value = _mapper.Map<AlunoResponse>(registro);
                 }
                 
             }
 
-            result.Value = _mapper.Map<AlunoResponse>(response);
             return result;
 
         }

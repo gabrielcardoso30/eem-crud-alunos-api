@@ -6,7 +6,7 @@ namespace Core.Enums.Gerencial
     {
         [Description("Infantil")]
         Infantil,
-        [Description("Médio")]
-        Medio
+        [Description("Fundamental")]
+        Fundamental
     }
 }

@@ -48,6 +48,12 @@ namespace Core.Commands.Gerencial.Handler
                 return result;
             }
 
+            if (String.IsNullOrEmpty(request.Request.Email))
+            {
+                result.WithError("O e-mail é obrigatório!");
+                return result;
+            }
+
             var registerForUpdate = _mapper.Map(request.Request, oldRegister);
             if (await _repository.UpdateAsync(oldRegister))
                 result.Value = _mapper.Map<ResponsavelResponse>(registerForUpdate);
