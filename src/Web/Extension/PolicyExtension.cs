@@ -66,7 +66,25 @@ namespace Web.Extension
                 options.AddPolicy(EnumPermissao.ConsultarPermissoesUsuario.ToString(),
                     policy => policy.Requirements.Add( new PolicyRequirement(EnumPermissao.ConsultarPermissoesUsuario.ToString())));
 
-                    
+                /****  RESPONSÁVEIS ****/
+                options.AddPolicy(EnumPermissao.CadastrarResponsavel.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.CadastrarResponsavel.ToString())));
+                options.AddPolicy(EnumPermissao.AtualizarResponsavel.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.AtualizarResponsavel.ToString())));
+                options.AddPolicy(EnumPermissao.DeletarResponsavel.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.DeletarResponsavel.ToString())));
+                options.AddPolicy(EnumPermissao.ConsultarResponsavel.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.ConsultarResponsavel.ToString())));
+
+                /****  ALUNOS ****/
+                options.AddPolicy(EnumPermissao.CadastrarAluno.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.CadastrarAluno.ToString())));
+                options.AddPolicy(EnumPermissao.AtualizarAluno.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.AtualizarAluno.ToString())));
+                options.AddPolicy(EnumPermissao.DeletarAluno.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.DeletarAluno.ToString())));
+                options.AddPolicy(EnumPermissao.ConsultarAluno.ToString(),
+                    policy => policy.Requirements.Add(new PolicyRequirement(EnumPermissao.ConsultarAluno.ToString())));
 
             });
 

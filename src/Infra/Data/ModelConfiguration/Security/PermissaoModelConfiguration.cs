@@ -216,9 +216,83 @@ namespace Infra.Data.ModelConfiguration.Security
                     TipoUsuario = 0,
                     DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
                     Deletado = false
-                }
+                },
 
-                
+                //RESPONSÁVEIS
+                new Permissao()
+                {
+                    Id = new Guid("F5C0DED7-355F-4026-9141-AD97E6F8BA5E"),
+                    Nome = "ConsultarResponsavel",
+                    Descricao = "Consultar Responsável",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+                new Permissao()
+                {
+                    Id = new Guid("D13364F3-BAC9-424E-9F8C-E5C816C71DB9"),
+                    Nome = "CadastrarResponsavel",
+                    Descricao = "Cadastrar Responsável",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+                new Permissao()
+                {
+                    Id = new Guid("AF411C34-84CA-4FE1-9A9A-C09677F75D38"),
+                    Nome = "AtualizarResponsavel",
+                    Descricao = "Atualizar Responsável",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+                new Permissao()
+                {
+                    Id = new Guid("757C0627-9E30-40B5-85B8-04935C037D40"),
+                    Nome = "DeletarResponsavel",
+                    Descricao = "Deletar Responsável",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+
+                //ALUNOS
+                new Permissao()
+                {
+                    Id = new Guid("2319D23C-9F81-42D1-8529-37A91A307EA7"),
+                    Nome = "ConsultarAluno",
+                    Descricao = "Consultar Aluno",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+                new Permissao()
+                {
+                    Id = new Guid("21FB4244-6039-459A-9F34-F491564F76D5"),
+                    Nome = "CadastrarAluno",
+                    Descricao = "Cadastrar Aluno",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+                new Permissao()
+                {
+                    Id = new Guid("C11831F3-752D-44CE-A6CE-8C2E5FB177E6"),
+                    Nome = "AtualizarAluno",
+                    Descricao = "Atualizar Aluno",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                },
+                new Permissao()
+                {
+                    Id = new Guid("B43414D1-7E22-4636-98A3-7DB191B509C4"),
+                    Nome = "DeletarAluno",
+                    Descricao = "Deletar Aluno",
+                    TipoUsuario = 0,
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local),
+                    Deletado = false
+                }
 
             );
         }

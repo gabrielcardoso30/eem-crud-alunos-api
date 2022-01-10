@@ -33,7 +33,16 @@ namespace Core.Enums.Security
         [Description("CadastrarPermissaoUsuario")] CadastrarPermissaoUsuario,
         [Description("DeletarPermissaoUsuario")] DeletarPermissaoUsuario,
 
-       
+        [Description("ConsultarResponsavel")] ConsultarResponsavel,
+        [Description("CadastrarResponsavel")] CadastrarResponsavel,
+        [Description("AtualizarResponsavel")] AtualizarResponsavel,
+        [Description("DeletarResponsavel")] DeletarResponsavel,
+
+        [Description("ConsultarAluno")] ConsultarAluno,
+        [Description("CadastrarAluno")] CadastrarAluno,
+        [Description("AtualizarAluno")] AtualizarAluno,
+        [Description("DeletarAluno")] DeletarAluno,
+
 
     }
 

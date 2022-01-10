@@ -173,7 +173,68 @@ namespace Infra.Data.ModelConfiguration.Security
                     PermissaoId = new Guid("71F80EEF-D10E-41D2-A803-E5B0F563B0DA"),
                     GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
                     DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+
+                //RESPONSÁVEIS
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("6DEBB8AF-F32C-4FA1-899B-EF26F2401FBD"),
+                    PermissaoId = new Guid("F5C0DED7-355F-4026-9141-AD97E6F8BA5E"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("4048F7F8-897E-400D-9615-DDDA89C8C2D4"),
+                    PermissaoId = new Guid("D13364F3-BAC9-424E-9F8C-E5C816C71DB9"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("9BF81381-6FF8-4E89-B636-A607684960BC"),
+                    PermissaoId = new Guid("AF411C34-84CA-4FE1-9A9A-C09677F75D38"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("5DA15091-299E-49B2-9C5A-6DCB1FAE7376"),
+                    PermissaoId = new Guid("757C0627-9E30-40B5-85B8-04935C037D40"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+
+                //ALUNOS
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("8559A05D-AFE3-432C-8D5D-00EAD9B318EB"),
+                    PermissaoId = new Guid("2319D23C-9F81-42D1-8529-37A91A307EA7"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("75C2F6B8-A2AE-4F62-AF7D-1ACD93ED5711"),
+                    PermissaoId = new Guid("21FB4244-6039-459A-9F34-F491564F76D5"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("D766E2E4-C0E1-46A6-9185-32356C616DFD"),
+                    PermissaoId = new Guid("C11831F3-752D-44CE-A6CE-8C2E5FB177E6"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
+                },
+                new PermissaoGrupo()
+                {
+                    Id = new Guid("6B86EF2D-EDAD-4784-8FB5-DA69348D5737"),
+                    PermissaoId = new Guid("B43414D1-7E22-4636-98A3-7DB191B509C4"),
+                    GrupoId = new Guid("2da65b7f-5238-4fec-a9cc-1cf3316dec11"),
+                    DataCriacao = new DateTime(2021, 1, 24, 18, 6, 7, 725, DateTimeKind.Local)
                 }
+
             );
         }
     }
