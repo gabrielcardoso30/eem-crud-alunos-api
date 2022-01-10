@@ -6,7 +6,7 @@ namespace Core.Models.Requests.Gerencial
     public class UpdateResponsavelRequest
     {
 
-        public Guid AlunoId { get; set; }
+        public Guid? AlunoId { get; set; }
         public string Nome { get; set; }
         public DateTime DataNascimento { get; set; }
         public string Parentesco { get; set; }

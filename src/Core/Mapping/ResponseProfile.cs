@@ -64,6 +64,7 @@ namespace Core.Mapping
 
                 IDictionary<string, string> dic = Enum.GetValues(typeof(EnumParentesco)).Cast<object>().ToDictionary(v => ((Enum)v).ObterDescricaoEnum(), k => ((Enum)k).Valor());
                 dest.Id = src.Id != null ? src.Id.ToString().ToUpper() : String.Empty;
+                dest.AlunoId = src.AlunoId != null ? src.AlunoId.ToString().ToUpper() : String.Empty;
                 dest.DataNascimento = src.DataNascimento != null ? Convert.ToDateTime(src.DataNascimento).ToString("yyyy-MM-ddTHH:mm:ss.fffZ") : String.Empty;
                 dest.DataNascimentoFormatada = src.DataNascimento != null ? Convert.ToDateTime(src.DataNascimento).ToString("dd/MM/yyyy HH:mm:ss") : String.Empty;
                 dest.ParentescoDescricao = src.Parentesco != null ? dic.Where(gc => gc.Value == src.Parentesco).FirstOrDefault().Key : String.Empty;

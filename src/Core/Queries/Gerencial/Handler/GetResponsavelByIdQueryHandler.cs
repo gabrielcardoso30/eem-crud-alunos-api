@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Entities.Gerencial;
 using Core.Helpers;
 using Core.Interfaces.Repositories.Gerencial;
 using Core.Interfaces.Security;
@@ -20,13 +21,16 @@ namespace Core.Queries.Gerencial.Handler
         private readonly IResponsavelRepository _repository;
         private readonly IMapper _mapper;
         private readonly IAuthenticatedUser _authenticatedUser;
+		private readonly IAlunoRepository _alunoRepository;
 
         public GetResponsavelByIdQueryHandler(
             IResponsavelRepository repository, 
             IMapper mapper,
-            IAuthenticatedUser authenticatedUser
+            IAuthenticatedUser authenticatedUser,
+			IAlunoRepository alunoRepository
         )
         {
+			_alunoRepository = alunoRepository;
             _repository = repository;
             _mapper = mapper;
             _authenticatedUser = authenticatedUser;
@@ -44,7 +48,10 @@ namespace Core.Queries.Gerencial.Handler
                 return result;
             }
 
+            Aluno aluno = await _alunoRepository.GetById(registro.AlunoId);
+
             result.Value = _mapper.Map<ResponsavelResponse>(registro);
+            result.Value.AlunoNome = aluno.Nome;
 
             return result;
 

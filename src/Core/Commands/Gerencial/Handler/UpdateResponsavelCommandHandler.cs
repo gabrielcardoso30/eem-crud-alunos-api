@@ -18,10 +18,15 @@ namespace Core.Commands.Gerencial.Handler
     {
 
         private readonly IResponsavelRepository _repository;
+		private readonly IAlunoRepository _alunoRepository;
         private readonly IMapper _mapper;
 
-        public UpdateResponsavelCommandHandler(IResponsavelRepository repository, IMapper mapper)
+		public UpdateResponsavelCommandHandler(
+			IResponsavelRepository repository,
+			IMapper mapper,
+			IAlunoRepository alunoRepository)
         {
+			_alunoRepository = alunoRepository;
             _repository = repository;
             _mapper = mapper;
         }
@@ -46,6 +51,21 @@ namespace Core.Commands.Gerencial.Handler
             {
                 result.WithError("Nome, parentesco, data de nascimento ou telefone estão inválidos!");
                 return result;
+            }
+
+            if (request.Request.AlunoId == null || request.Request.AlunoId == Guid.Empty)
+            {
+                result.WithError("Um responsável precisa ter um aluno selecionado.");
+                return result;
+            }
+            else
+            {
+                Aluno aluno = await _alunoRepository.GetById(request.Request.AlunoId ?? Guid.Empty);
+                if (aluno == null)
+                {
+                    result.WithError("Aluno informado não existe ou está inativo.");
+                    return result;
+                }
             }
 
             if (String.IsNullOrEmpty(request.Request.Email))

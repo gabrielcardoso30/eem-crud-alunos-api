@@ -52,7 +52,7 @@ namespace Core.Queries.Gerencial.Handler
             var registros = await _repository.SearchAll(query.Filter.Text, query.Filter.Take, query.Filter.Skip, query.Filter.TableFilter);
                         
             IEnumerable<ResponsavelResponse> enumerable = registros.Result(out var count).Select(p => _mapper.Map<ResponsavelResponse>(p)).ToList();
-            IList<Aluno> alunos = await _alunoRepository.Get(enumerable.Select(gc => Guid.Parse(gc.Id)).ToArray());
+            IList<Aluno> alunos = await _alunoRepository.Get(enumerable.Select(gc => Guid.Parse(gc.AlunoId)).ToArray());
             foreach (var item in enumerable) item.AlunoNome = alunos.Where(gc => Convert.ToString(gc.Id).ToUpper() == item.AlunoId).FirstOrDefault()?.Nome ?? String.Empty;
             
             if (!String.IsNullOrEmpty(query.Filter.SortingProp))
