@@ -38,9 +38,9 @@ namespace Infra.Data.Repositories.Rdo
         {
 
             var query = _dbContext.Aluno.AsQueryable();
-            if (!String.IsNullOrEmpty(text)) query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada && 
+            if (!String.IsNullOrEmpty(text)) query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada &&
             (
-                gc.Nome.Contains(text) 
+                gc.Nome.Contains(text)
                 || gc.Segmento.ToUpper().Contains(text.ToUpper())
                 || gc.Email.ToUpper().Contains(text.ToUpper())
             ));
@@ -54,18 +54,59 @@ namespace Infra.Data.Repositories.Rdo
         {
 
             var query = _dbContext.Aluno.AsQueryable();
+            bool realizouFiltro = true;
             query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada);
-            if (!String.IsNullOrEmpty(text)) query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada &&
-            (
-                gc.Nome.Contains(text)
-                || gc.Segmento.ToUpper().Contains(text.ToUpper())
-                || gc.Email.ToUpper().Contains(text.ToUpper())
-            ));
+            if (!String.IsNullOrEmpty(text))
+            {
+                query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada &&
+                (
+                    gc.Nome.Contains(text)
+                    || gc.Segmento.ToUpper().Contains(text.ToUpper())
+                    || gc.Email.ToUpper().Contains(text.ToUpper())
+                ));
+            }
 
             IList<KeyValuePair<string, string>> tableFilterList = new List<KeyValuePair<string, string>>();
             int nullOrEmptyFields = 0;
             if (!String.IsNullOrEmpty(tableFilter)) tableFilterList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(tableFilter);
 
+            if (tableFilterList.Count > 0)
+            {
+
+                foreach (var item in tableFilterList) if (String.IsNullOrEmpty(item.Value)) nullOrEmptyFields++;
+                if (nullOrEmptyFields != tableFilterList.Count)
+                {
+
+                    realizouFiltro = false;
+                    string nome = tableFilterList.Where(gc => gc.Key.ToUpper() == "NOME").FirstOrDefault().Value;
+                    string segmento = tableFilterList.Where(gc => gc.Key.ToUpper() == "SEGMENTO").FirstOrDefault().Value;
+                    string responsavelNome = tableFilterList.Where(gc => gc.Key.ToUpper() == "RESPONSAVEL").FirstOrDefault().Value;
+
+                    if (!String.IsNullOrEmpty(nome))
+                    {
+                        realizouFiltro = true;
+                        query = query.Where(gc => gc.Nome.ToUpper().Contains(nome.ToUpper()));
+                    }
+                    if (!String.IsNullOrEmpty(segmento))
+                    {
+                        realizouFiltro = true;
+                        query = query.Where(gc => gc.Segmento.ToUpper().Contains(segmento.ToUpper()));
+                    }
+                    if (!String.IsNullOrEmpty(responsavelNome))
+                    {
+                        Responsavel responsavel = await _dbContext.Responsavel.Where(gc => gc.Nome.ToUpper().Contains(responsavelNome.ToUpper())).FirstOrDefaultAsync();
+                        if (responsavel != null)
+                        {
+                            realizouFiltro = true;
+                            query = query.Where(gc => gc.Id == responsavel.AlunoId);
+                        }
+                    }
+
+                }
+
+            }
+
+            if (!realizouFiltro) query = query.Where(gc => gc.Id == Guid.Empty);
             int totalCount = await query.CountAsync();
 
             if (take != null && offSet != null)

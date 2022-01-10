@@ -70,16 +70,67 @@ namespace Infra.Data.Repositories.Gerencial
         {
 
             var query = _dbContext.Responsavel.AsQueryable();
+            bool realizouFiltro = true;
             query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada);
 
-            if (!String.IsNullOrEmpty(text)) query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada &&
-            (
-                gc.Nome.ToUpper().Contains(text.ToUpper())
-                || gc.Parentesco.ToUpper().Contains(text.ToUpper())
-                || gc.Telefone.ToUpper().Contains(text.ToUpper())
-                || (gc.Email ?? String.Empty).ToUpper().Contains(text.ToUpper())
-            ));
+            if (!String.IsNullOrEmpty(text)) 
+            {
+                query = query.Where(gc => gc.UnidadeAcessoId == _unidadeAcessoSelecionada &&
+                (
+                    gc.Nome.ToUpper().Contains(text.ToUpper())
+                    || gc.Parentesco.ToUpper().Contains(text.ToUpper())
+                    || gc.Telefone.ToUpper().Contains(text.ToUpper())
+                    || (gc.Email ?? String.Empty).ToUpper().Contains(text.ToUpper())
+                ));
+            }
 
+            IList<KeyValuePair<string, string>> tableFilterList = new List<KeyValuePair<string, string>>();
+            int nullOrEmptyFields = 0;
+            if (!String.IsNullOrEmpty(tableFilter)) tableFilterList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(tableFilter);
+
+            if (tableFilterList.Count > 0)
+            {
+
+                foreach (var item in tableFilterList) if (String.IsNullOrEmpty(item.Value)) nullOrEmptyFields++;
+                if (nullOrEmptyFields != tableFilterList.Count)
+                {
+
+                    realizouFiltro = false;
+                    string nome = tableFilterList.Where(gc => gc.Key.ToUpper() == "NOME").FirstOrDefault().Value;
+                    string parentesco = tableFilterList.Where(gc => gc.Key.ToUpper() == "PARENTESCO").FirstOrDefault().Value;
+                    string alunoNome = tableFilterList.Where(gc => gc.Key.ToUpper() == "ALUNO").FirstOrDefault().Value;
+                    string telefone = tableFilterList.Where(gc => gc.Key.ToUpper() == "TELEFONE").FirstOrDefault().Value;
+
+                    if (!String.IsNullOrEmpty(nome))
+                    {
+                        realizouFiltro = true;
+                        query = query.Where(gc => gc.Nome.ToUpper().Contains(nome.ToUpper()));
+                    }
+                    if (!String.IsNullOrEmpty(parentesco))
+                    {
+                        realizouFiltro = true;
+                        query = query.Where(gc => gc.Parentesco.ToUpper().Contains(parentesco.ToUpper()));
+                    }
+                    if (!String.IsNullOrEmpty(telefone))
+                    {
+                        realizouFiltro = true;
+                        query = query.Where(gc => gc.Telefone.ToUpper().Contains(telefone.ToUpper()));
+                    }
+                    if (!String.IsNullOrEmpty(alunoNome))
+                    {
+                        Aluno aluno = await _dbContext.Aluno.Where(gc => gc.Nome.ToUpper().Contains(alunoNome.ToUpper())).FirstOrDefaultAsync();
+                        if (aluno != null)
+                        {
+                            realizouFiltro = true;
+                            query = query.Where(gc => gc.AlunoId == aluno.Id);
+                        }
+                    }
+
+                }
+
+            }
+
+            if (!realizouFiltro) query = query.Where(gc => gc.Id == Guid.Empty);
             int totalCount = await query.CountAsync();
 
             if (take != null && offSet != null)
