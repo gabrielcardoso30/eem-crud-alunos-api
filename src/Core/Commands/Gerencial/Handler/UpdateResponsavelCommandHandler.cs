@@ -44,7 +44,7 @@ namespace Core.Commands.Gerencial.Handler
                  || request.Request.DataNascimento < DateTime.Parse("1900-01-01")
             )
             {
-                result.WithError("Nome, sigla, data de nascimento ou telefone estão inválidos!");
+                result.WithError("Nome, parentesco, data de nascimento ou telefone estão inválidos!");
                 return result;
             }
 
