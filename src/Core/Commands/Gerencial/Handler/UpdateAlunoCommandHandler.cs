@@ -10,6 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Core.Interfaces.Helpers;
+using System.IO;
 
 namespace Core.Commands.Gerencial.Handler
 {
@@ -18,10 +21,15 @@ namespace Core.Commands.Gerencial.Handler
     {
 
         private readonly IAlunoRepository _repository;
+		private readonly IBlobStorage _blobStorage;
         private readonly IMapper _mapper;
 
-        public UpdateAlunoCommandHandler(IAlunoRepository repository, IMapper mapper)
+		public UpdateAlunoCommandHandler(
+			IAlunoRepository repository,
+			IMapper mapper,
+			IBlobStorage blobStorage)
         {
+			_blobStorage = blobStorage;
             _repository = repository;
             _mapper = mapper;
         }
@@ -46,10 +54,33 @@ namespace Core.Commands.Gerencial.Handler
                 result.WithError("Nome, segmento ou a data de nascimento estão inválidos!");
                 return result;
             }
-            
+
             var registerForUpdate = _mapper.Map(request.Request, oldRegister);
             if (await _repository.UpdateAsync(oldRegister))
                 result.Value = _mapper.Map<AlunoResponse>(registerForUpdate);
+
+            if (!String.IsNullOrEmpty(request.Request.FotoBase64) && !String.IsNullOrEmpty(request.Request.FotoTipo))
+            {
+
+                BlobContainerClient blobContainerClient = _blobStorage.CheckIfExistsBlobContainer("eem-usuarios-fotos");
+
+                if (blobContainerClient == null)
+                {
+                    blobContainerClient = await _blobStorage.CreateBlobContainerAsync("eem-usuarios-fotos");
+                }
+
+                var bytes = Convert.FromBase64String(request.Request.FotoBase64);
+                Stream stream = new MemoryStream(bytes);
+                string arquivoUrl = await _blobStorage.UploadFileAsync($"arquivo/{request.Request.FotoTipo}", stream, "eem-usuarios-fotos", blobContainerClient);
+
+                if (!String.IsNullOrEmpty(arquivoUrl))
+                {
+                    registerForUpdate = _mapper.Map(request.Request, oldRegister);
+                    if (await _repository.UpdateAsync(oldRegister))
+                        result.Value = _mapper.Map<AlunoResponse>(registerForUpdate);
+                }
+
+            }
 
             return result;
 

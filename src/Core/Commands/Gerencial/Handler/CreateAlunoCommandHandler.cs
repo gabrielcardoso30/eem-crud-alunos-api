@@ -10,6 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Core.Interfaces.Helpers;
+using System.IO;
 
 namespace Core.Commands.Gerencial.Handler
 {
@@ -18,10 +21,15 @@ namespace Core.Commands.Gerencial.Handler
     {
 
         private readonly IAlunoRepository _repository;
+		private readonly IBlobStorage _blobStorage;
         private readonly IMapper _mapper;
 
-        public CreateAlunoCommandHandler(IAlunoRepository repository, IMapper mapper)
+		public CreateAlunoCommandHandler(
+			IAlunoRepository repository,
+			IMapper mapper,
+			IBlobStorage blobStorage)
         {
+			_blobStorage = blobStorage;
             _repository = repository;
             _mapper = mapper;
         }
@@ -31,7 +39,7 @@ namespace Core.Commands.Gerencial.Handler
 
             var result = new Result<AlunoResponse>();
 
-            if (String.IsNullOrEmpty(request.Request.Nome) 
+            if (String.IsNullOrEmpty(request.Request.Nome)
                 || String.IsNullOrEmpty(request.Request.Segmento)
                 || request.Request.DataNascimento < DateTime.Parse("1900-01-01")
             )
@@ -42,8 +50,31 @@ namespace Core.Commands.Gerencial.Handler
 
             var registro = _mapper.Map<Aluno>(request.Request);
             registro.UnidadeAcessoId = await _repository.GetSelectedAccessUnitIdAsync();
-            var grupo = await _repository.AddAsync(registro);
-            result.Value = _mapper.Map<AlunoResponse>(grupo);
+            var response = await _repository.AddAsync(registro);
+
+            if (!String.IsNullOrEmpty(request.Request.FotoBase64) && !String.IsNullOrEmpty(request.Request.FotoTipo))
+            {
+
+                BlobContainerClient blobContainerClient = _blobStorage.CheckIfExistsBlobContainer("eem-usuarios-fotos");
+
+                if (blobContainerClient == null)
+                {
+                    blobContainerClient = await _blobStorage.CreateBlobContainerAsync("eem-usuarios-fotos");
+                }
+
+                var bytes = Convert.FromBase64String(request.Request.FotoBase64);
+                Stream stream = new MemoryStream(bytes);
+                string arquivoUrl = await _blobStorage.UploadFileAsync($"arquivo/{request.Request.FotoTipo}", stream, "eem-usuarios-fotos", blobContainerClient);
+
+                if (!String.IsNullOrEmpty(arquivoUrl))
+                {
+                    registro.FotoUrl = arquivoUrl;
+                    response = await _repository.AddAsync(registro);
+                }
+                
+            }
+
+            result.Value = _mapper.Map<AlunoResponse>(response);
             return result;
 
         }
