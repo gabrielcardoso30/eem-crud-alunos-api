@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Core.Commands.Security;
+using Core.Entities.Gerencial;
 using Core.Entities.Security;
 using Core.Models.Request.Security;
+using Core.Models.Requests.Gerencial;
 using System;
 
 namespace Core.Mapping
@@ -44,6 +46,22 @@ namespace Core.Mapping
                  dest.Deletado = false;
              });
             CreateMap<UpdateUnidadeAcessoRequest, UnidadeAcesso>();
+
+            CreateMap<CreateAlunoRequest, Aluno>()
+            .AfterMap((src, dest) =>
+            {
+                dest.DataCriacao = DateTime.Now;
+                dest.Deletado = false;
+            });
+            CreateMap<UpdateAlunoRequest, Aluno>();
+
+            CreateMap<CreateResponsavelRequest, Responsavel>()
+            .AfterMap((src, dest) =>
+            {
+                dest.DataCriacao = DateTime.Now;
+                dest.Deletado = false;
+            });
+            CreateMap<UpdateResponsavelRequest, Responsavel>();
 
         }
 
